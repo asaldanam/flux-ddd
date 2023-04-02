@@ -1,0 +1,18 @@
+{
+  "name": "flux-ddd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "lib:create": "tsdx create"
+  },
+  "author": "asaldanam",
+  "license": "ISC",
+  "workspaces": [
+    "packages/**/*, examples/**/*"
+  ],
+  "devDependencies": {
+    "tsdx": "^0.14.1"
+  }
+}
