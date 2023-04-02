@@ -5,12 +5,15 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "lib:create": "tsdx create"
+    "lib:create": "tsdx create",
+    "start:marketplace": "yarn workspace marketplace start",
+    "start:flux-ddd": "yarn workspace flux-ddd start",
+    "build:flux-ddd": "yarn workspace flux-ddd build"
   },
   "author": "asaldanam",
   "license": "ISC",
   "workspaces": [
-    "packages/**/*, examples/**/*"
+    "packages/**/*", "examples/**/*"
   ],
   "devDependencies": {
     "tsdx": "^0.14.1"
