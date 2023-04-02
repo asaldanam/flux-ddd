@@ -23,7 +23,7 @@ export const ProductsStore = createSlice({
     }),
 
     remove: (state, id: Product['id']) => produce(state, draft => {
-      draft.products = draft.products.filter(product => product.id === id);
+      draft.products = draft.products.filter(product => product.id !== id);
       draft.meta.loading = false;
     }),
 
@@ -33,25 +33,25 @@ export const ProductsStore = createSlice({
     }),
     
     // Meta
-    setError: (state, error: string) => produce(state, draft => {
-      draft.meta.error = error;
-    }) ,
     setLoading: (state, loading: boolean) => produce(state, draft => {
       draft.meta.loading = loading;
-    })
+    }),
+    setError: (state, error: string) => produce(state, draft => {
+      draft.meta.error = error;
+      draft.meta.loading = false;
+    }) ,
   },
   actions: (dispatch, repositories: Repositories) => ({
     async loadAllProducts() {
       try {
         dispatch('setLoading', true);
         const products = await repositories.products.getAll();
-        console.log('load')
+
         dispatch('setAll', products);
       } catch (error: any) {
         dispatch('setError', error)
       }
     },
-
     async addNewProduct(newProduct: NewProduct) {
       try {
         dispatch('setLoading', true);
@@ -64,7 +64,6 @@ export const ProductsStore = createSlice({
         dispatch('setError', (error as Error).message)
       }
     },
-
     async removeProduct(id: Product['id']) {
       try {
         dispatch('setLoading', true);

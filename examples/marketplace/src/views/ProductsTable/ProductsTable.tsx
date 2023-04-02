@@ -9,9 +9,10 @@ export const ProductsTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+  const addProduct = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    const formData = new FormData(ev.target as HTMLFormElement);
+    const form = ev.target as HTMLFormElement;
+    const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
     await actions.addNewProduct({
@@ -19,13 +20,18 @@ export const ProductsTable = () => {
       category: data.category as string,
       price: parseInt(data.price as string),
     })
+
+    form.reset();
   }
 
-  console.log(meta)
+  const deleteProduct = (id: string) => {
+    actions.removeProduct(id)
+  }
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <div>{JSON.stringify(meta)}</div>
+      <form onSubmit={addProduct}>
         <table>
           <thead>
             <tr>
@@ -41,7 +47,7 @@ export const ProductsTable = () => {
                 <td>{product.name}</td>
                 <td>{product.category}</td>
                 <td>{product.price}</td>
-                <td></td>
+                <td><button onClick={() => deleteProduct(product.id)}>X</button></td>
               </tr>
             ))}
             <tr>
