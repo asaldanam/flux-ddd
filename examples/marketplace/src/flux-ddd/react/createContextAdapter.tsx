@@ -6,16 +6,14 @@ export function createContextAdapter<
   Reducers extends Record<string, (state: State, payload?: any) => State>,
   Type extends Extract<keyof Reducers, string>,
   Dispatch extends <T extends Type>(type: T, payload: Parameters<Reducers[T]>[1]) => void,
-  Actions extends string,
-  Action extends (payload: any) => void | Promise<void>,
+  Actions extends any,
   Repositories extends any,
 >(config: {
     name: Name;
     state: State;
     reducers: Reducers,
-    actions: (dispatch: Dispatch, repositories: Repositories) => ({ 
-      [A in Actions]: Action
-    })
+
+    actions: (dispatch: Dispatch, repositories: Repositories) => Actions
 }) {
   const initialState = config.state;
   
@@ -29,8 +27,13 @@ export function createContextAdapter<
   const Provider = ({ children, ...repositories }: PropsWithChildren<Repositories>) => {
     const reducer = (
       state: State,
-      action: { type: Parameters<Dispatch>[0], payload: Parameters<Dispatch>[1] }
-    ) => config.reducers[action.type](state, action.payload);
+      action: {
+        type: Parameters<Dispatch>[0],
+        payload: Parameters<Dispatch>[1]
+      }
+    ) => {
+      return config.reducers[action.type](state, action.payload);
+    }
 
     const [state, _dispatch] = useReducer(reducer, initialState);
    
@@ -40,6 +43,7 @@ export function createContextAdapter<
 
     const actions = config.actions(dispatch, repositories as Repositories);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const value = useMemo(() => ({ state, actions }), [state])
 
     return (
@@ -51,6 +55,6 @@ export function createContextAdapter<
 
   return {
     Provider,
-    hook: () => useContext(Context),
+    useContext: () => useContext(Context),
   }
 }

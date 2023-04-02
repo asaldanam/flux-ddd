@@ -5,6 +5,7 @@ export interface Product {
   id: string;
   name: string;
   category: string;
+  price: number;
 }
 
 // Derived types
@@ -21,8 +22,11 @@ export function createProduct(newProduct: NewProduct, products: Product[]): Prod
   if (products.some(product => product.name === newProduct.name))
     throw new Error('product-already-exists')
   
+  if (typeof newProduct.price !== 'number' || isNaN(newProduct.price))
+    throw new Error('price-is-not-a-number')
+  
   return {
-    id: newProduct.id || new Date().toDateString(),
+    id: newProduct.id || new Date().getTime().toString(),
     ...newProduct,
   }
 }

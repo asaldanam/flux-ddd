@@ -16,4 +16,10 @@ export const localStorageProductsRepository: ProductsRepository = {
 
     localStorage.setItem(key, JSON.stringify(updatedProducts))
   },
+  async remove(id) {
+    const products = await this.getAll();
+    const updatedProducts = products.filter(p => p.id === id);
+    
+    localStorage.setItem(key, JSON.stringify(updatedProducts))
+  }
 }

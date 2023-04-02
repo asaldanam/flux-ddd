@@ -22,6 +22,11 @@ export const ProductsStore = createSlice({
       draft.meta.loading = false;
     }),
 
+    remove: (state, id: Product['id']) => produce(state, draft => {
+      draft.products = draft.products.filter(product => product.id === id);
+      draft.meta.loading = false;
+    }),
+
     setAll: (state, products: Product[]) => produce(state, draft => {
       draft.products = products
       draft.meta.loading = false;
@@ -32,7 +37,7 @@ export const ProductsStore = createSlice({
       draft.meta.error = error;
     }) ,
     setLoading: (state, loading: boolean) => produce(state, draft => {
-      draft.meta.loading
+      draft.meta.loading = loading;
     })
   },
   actions: (dispatch, repositories: Repositories) => ({
@@ -40,7 +45,7 @@ export const ProductsStore = createSlice({
       try {
         dispatch('setLoading', true);
         const products = await repositories.products.getAll();
-        
+        console.log('load')
         dispatch('setAll', products);
       } catch (error: any) {
         dispatch('setError', error)
@@ -50,14 +55,24 @@ export const ProductsStore = createSlice({
     async addNewProduct(newProduct: NewProduct) {
       try {
         dispatch('setLoading', true);
-
         const products = await repositories.products.getAll();
         const product = createProduct(newProduct, products)
         
-        dispatch('add', product);
         await repositories.products.save(product);
+        dispatch('add', product);
       } catch(error: any) {
-        dispatch('setError', error)
+        dispatch('setError', (error as Error).message)
+      }
+    },
+
+    async removeProduct(id: Product['id']) {
+      try {
+        dispatch('setLoading', true);
+
+        await repositories.products.remove(id);
+        dispatch('remove', id);
+      } catch (error: any) {
+        dispatch('setError', (error as Error).message)
       }
     }
   }),
