@@ -1,9 +1,10 @@
-import { ProductsTable } from "views/Dashboard/ProductsTable/ProductsTable"
+import { ProductsTable } from "views/Shop/ProductsTable/ProductsTable"
 
-export const Dashboard = () => {
-  console.log('render Dashboard');
+export const Shop = () => {
+  console.log('render Shop');
   return (
     <>
+      <h2>Shop</h2>
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(12, [col-start] 1fr)',

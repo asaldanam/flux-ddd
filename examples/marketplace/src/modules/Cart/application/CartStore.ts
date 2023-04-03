@@ -28,9 +28,9 @@ export const CartStore = createSlice({
     })
   },
   actions: (dispatch) => ({
-    async addItemToCart(newCartItem: NewCartItem) {
+    async addItemToCart(productId: CartItem['productId']) {
       try {
-        const cartItem = createCartItem(newCartItem);
+        const cartItem = createCartItem({ productId });
 
         dispatch('cartItemAdded', cartItem);
       } catch (error: any) {

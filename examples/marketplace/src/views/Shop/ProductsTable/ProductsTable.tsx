@@ -1,8 +1,14 @@
+import { useCart } from "modules/Cart/infraestructure/cartContext";
 import { useProducts } from "modules/Products/infraestructure/productsContext";
 import { FormEvent, useEffect } from "react";
 
-export const ProductsTable = () => {
+interface ProductsTableProps {
+  editable?: boolean;
+}
+
+export const ProductsTable = ({ editable }: ProductsTableProps) => {
   const { state: { products, meta }, actions } = useProducts();
+  const { actions: { addItemToCart } } = useCart();
 
   useEffect(() => {
     actions.loadAllProducts()
@@ -30,15 +36,15 @@ export const ProductsTable = () => {
 
   return (
     <div>
-      <div>{JSON.stringify(meta)}</div>
+      <h4>{'<ProductsTable />'}</h4>
       <form onSubmit={addProduct}>
-        <table>
+        <table style={{ width: '100%' }}>
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th>Categoria</th>
-              <th>Precio</th>
-              <th></th>
+              <th style={{ textAlign: 'left' }}>Name</th>
+              <th style={{ textAlign: 'left' }}>Category</th>
+              <th style={{ textAlign: 'left' }}>Price</th>
+              <th style={{ textAlign: 'left' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -47,19 +53,27 @@ export const ProductsTable = () => {
                 <td>{product.name}</td>
                 <td>{product.category}</td>
                 <td>{product.price}</td>
-                <td><button onClick={() => deleteProduct(product.id)}>Remove</button></td>
+                  <td>
+                  {editable
+                    ? <button onClick={() => deleteProduct(product.id)}>Remove</button>
+                    : <button onClick={() => addItemToCart(product.id)}>Buy</button>
+                  }
+                  </td>
               </tr>
             ))}
-            <tr>
-              <td><input name="name" placeholder="Name" /></td>
-              <td><input name="category" placeholder="Category" /></td>
-              <td><input name="price" type="number" placeholder="Price" /></td>
-              <td><button type="submit">Add</button></td>
-            </tr>
+            {editable && (
+              <tr>
+                <td><input name="name" placeholder="Name" /></td>
+                <td><input name="category" placeholder="Category" /></td>
+                <td><input name="price" type="number" placeholder="Price" /></td>
+                <td><button type="submit">Create</button></td>
+              </tr>
+            )}
           </tbody>
         </table>
       </form>
-      {/* <div>{meta.error}</div> */}
+
+      <small><pre>{JSON.stringify(meta, null, 2)}</pre></small>
     </div>
   );
 };

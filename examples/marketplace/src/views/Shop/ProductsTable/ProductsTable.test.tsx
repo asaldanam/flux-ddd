@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { CartProvider } from 'modules/Cart/infraestructure/cartContext';
 import { ProductsRepository } from 'modules/Products/domain/ProductsRepository';
 import { ProductsProvider } from 'modules/Products/infraestructure/productsContext';
 import { act } from 'react-dom/test-utils';
@@ -20,7 +21,7 @@ describe('Given Products Table', () => {
     fireEvent.change(screen.getByPlaceholderText('Name'), { target: { value: 'PeraMock' } })
     fireEvent.change(screen.getByPlaceholderText('Category'), { target: { value: 'FrutaMock' } })
     fireEvent.change(screen.getByPlaceholderText('Price'), { target: { value: 2 } })
-    fireEvent.click(await screen.findByText('Add'))
+    fireEvent.click(await screen.findByText('Create'))
 
     expect(await screen.findByText(/PeraMock/i)).toBeInTheDocument();
   });
@@ -46,7 +47,9 @@ async function setup() {
   await act(async () => 
     render(
       <ProductsProvider products={mockProductsRepository}>
-        <ProductsTable />
+        <CartProvider>
+          <ProductsTable editable />
+        </CartProvider>
       </ProductsProvider>
     )
   )
