@@ -17,26 +17,26 @@ export const ProductsStore = createSlice({
     }
   },
   reducers: {
-    add: (state, product: Product) => produce(state, draft => {
+    added: (state, product: Product) => produce(state, draft => {
       draft.products.push(product);
       draft.meta.loading = false;
     }),
 
-    remove: (state, id: Product['id']) => produce(state, draft => {
+    removed: (state, id: Product['id']) => produce(state, draft => {
       draft.products = draft.products.filter(product => product.id !== id);
       draft.meta.loading = false;
     }),
 
-    setAll: (state, products: Product[]) => produce(state, draft => {
+    allSetted: (state, products: Product[]) => produce(state, draft => {
       draft.products = products
       draft.meta.loading = false;
     }),
     
     // Meta
-    setLoading: (state, loading: boolean) => produce(state, draft => {
-      draft.meta.loading = loading;
+    loadingStarted: (state) => produce(state, draft => {
+      draft.meta.loading = true;
     }),
-    setError: (state, error: string) => produce(state, draft => {
+    errorSetted: (state, error: string) => produce(state, draft => {
       draft.meta.error = error;
       draft.meta.loading = false;
     }) ,
@@ -44,34 +44,34 @@ export const ProductsStore = createSlice({
   actions: (dispatch, repositories: Repositories) => ({
     async loadAllProducts() {
       try {
-        dispatch('setLoading', true);
+        dispatch('loadingStarted', undefined);
         const products = await repositories.products.getAll();
 
-        dispatch('setAll', products);
+        dispatch('allSetted', products);
       } catch (error: any) {
-        dispatch('setError', error)
+        dispatch('errorSetted', error)
       }
     },
     async addNewProduct(newProduct: NewProduct) {
       try {
-        dispatch('setLoading', true);
+        dispatch('loadingStarted', undefined);
         const products = await repositories.products.getAll();
         const product = createProduct(newProduct, products)
         
         await repositories.products.save(product);
-        dispatch('add', product);
+        dispatch('added', product);
       } catch(error: any) {
-        dispatch('setError', (error as Error).message)
+        dispatch('errorSetted', (error as Error).message)
       }
     },
     async removeProduct(id: Product['id']) {
       try {
-        dispatch('setLoading', true);
+        dispatch('loadingStarted', undefined);
 
         await repositories.products.remove(id);
-        dispatch('remove', id);
+        dispatch('removed', id);
       } catch (error: any) {
-        dispatch('setError', (error as Error).message)
+        dispatch('errorSetted', (error as Error).message)
       }
     }
   }),
