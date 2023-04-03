@@ -16,6 +16,15 @@ export const productNameMaxLength = 32;
 
 // Entity handlers
 export function createProduct(newProduct: NewProduct, products: Product[]): Product {
+  if (!newProduct.name)
+    throw new Error('name-mandatory')
+  
+  if (!newProduct.category)
+    throw new Error('category-mandatory')
+  
+  if (!newProduct.price)
+    throw new Error('price-mandatory')
+  
   if (newProduct.name.length > productNameMaxLength)
     throw new Error('name-max-length')
 
@@ -24,6 +33,7 @@ export function createProduct(newProduct: NewProduct, products: Product[]): Prod
   
   if (typeof newProduct.price !== 'number' || isNaN(newProduct.price))
     throw new Error('price-is-not-a-number')
+  
   
   return {
     id: newProduct.id || new Date().getTime().toString(),
