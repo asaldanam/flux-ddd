@@ -1,4 +1,5 @@
-import { ProductsTable } from "views/Shop/ProductsTable/ProductsTable"
+import { ProductsTable } from "components/ProductsTable/ProductsTable"
+import { Cart } from "./Cart/Cart";
 
 export const Shop = () => {
   console.log('render Shop');
@@ -14,7 +15,7 @@ export const Shop = () => {
           <ProductsTable />
         </div>
         <div style={{ gridColumn: 'span 4', border: '1px dashed blue' }}>
-          Cart
+          <Cart />
         </div>
         <div style={{ gridColumn: 'span 12', border: '1px dashed green' }}>
           Orders

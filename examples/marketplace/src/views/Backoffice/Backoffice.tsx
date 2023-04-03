@@ -1,4 +1,4 @@
-import { ProductsTable } from "views/Shop/ProductsTable/ProductsTable"
+import { ProductsTable } from "components/ProductsTable/ProductsTable"
 
 export const Backoffice = () => {
   console.log('render Backoffice');

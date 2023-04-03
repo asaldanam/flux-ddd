@@ -7,11 +7,11 @@ interface ProductsTableProps {
 }
 
 export const ProductsTable = ({ editable }: ProductsTableProps) => {
-  const { state: { products, meta }, actions } = useProducts();
+  const { state: { products, meta }, actions: { loadAllProducts, addNewProduct, removeProduct } } = useProducts();
   const { actions: { addItemToCart } } = useCart();
 
   useEffect(() => {
-    actions.loadAllProducts()
+    loadAllProducts()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -21,17 +21,13 @@ export const ProductsTable = ({ editable }: ProductsTableProps) => {
     const formData = new FormData(form as HTMLFormElement);
     const data = Object.fromEntries(formData);
 
-    await actions.addNewProduct({
+    await addNewProduct({
       name: data.name as string,
       category: data.category as string,
       price: parseInt(data.price as string),
     })
 
     form.reset();
-  }
-
-  const deleteProduct = (id: string) => {
-    actions.removeProduct(id)
   }
 
   return (
@@ -55,8 +51,8 @@ export const ProductsTable = ({ editable }: ProductsTableProps) => {
                 <td>{product.price}</td>
                   <td>
                   {editable
-                    ? <button onClick={() => deleteProduct(product.id)}>Remove</button>
-                    : <button onClick={() => addItemToCart(product.id)}>Buy</button>
+                    ? <button type="button" onClick={() => removeProduct(product.id)}>Remove</button>
+                    : <button type="button" onClick={() => addItemToCart(product.id)}>Add to Cart</button>
                   }
                   </td>
               </tr>

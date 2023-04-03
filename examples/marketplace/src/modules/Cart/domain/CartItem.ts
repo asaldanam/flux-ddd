@@ -3,19 +3,19 @@ import { Optional } from "typescript/utils";
 // Entities
 export interface CartItem {
   productId: string;
-  count: number;
+  units: number;
 }
 
 // Derived types
-export type NewCartItem = Optional<CartItem, 'count'>;
+export type NewCartItem = Optional<CartItem, 'units'>;
 
 // Entity creators
 export function createCartItem(newCartItem: NewCartItem): CartItem {
-  if (newCartItem.count && newCartItem.count <= 0)
+  if (newCartItem.units && newCartItem.units <= 0)
     throw new Error('invalid-count')
 
   return {
-    count: 1,
+    units: 1,
     ...newCartItem,
   }
 }

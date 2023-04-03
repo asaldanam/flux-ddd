@@ -21,6 +21,7 @@ describe('Given Products Table', () => {
     fireEvent.change(screen.getByPlaceholderText('Name'), { target: { value: 'PeraMock' } })
     fireEvent.change(screen.getByPlaceholderText('Category'), { target: { value: 'FrutaMock' } })
     fireEvent.change(screen.getByPlaceholderText('Price'), { target: { value: 2 } })
+
     fireEvent.click(await screen.findByText('Create'))
 
     expect(await screen.findByText(/PeraMock/i)).toBeInTheDocument();

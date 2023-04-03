@@ -9,8 +9,10 @@ function App() {
     <div>
       <ProductsProvider products={localStorageProductsRepository}>
         <CartProvider>
-          <Shop />
-          <Backoffice />
+          <div>
+            <Shop />
+            <Backoffice />
+          </div>
         </CartProvider>
       </ProductsProvider>
     </div>

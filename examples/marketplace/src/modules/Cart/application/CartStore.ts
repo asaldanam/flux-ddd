@@ -1,6 +1,6 @@
 import { createSlice } from "flux-ddd";
 import produce from "immer";
-import { CartItem, createCartItem, NewCartItem } from "../domain/CartItem";
+import { CartItem, createCartItem } from "../domain/CartItem";
 import { addCartItem } from "./usecases/addCartItem";
 import { incrementCartItemCount } from "./usecases/incrementCartItemCount";
 
@@ -20,8 +20,11 @@ export const CartStore = createSlice({
         incrementCartItemCount(draft, cartItem);
         return;
       }
-      
+
       addCartItem(draft, cartItem);
+    }),
+    cartItemRemoved: (state, cartItem: CartItem) => produce(state, draft => {
+      draft.cart = draft.cart.filter(item => item.productId !== cartItem.productId);
     }),
     errorSetted: (state, error: string) => produce(state, draft => {
       draft.meta.error = error;
@@ -33,6 +36,15 @@ export const CartStore = createSlice({
         const cartItem = createCartItem({ productId });
 
         dispatch('cartItemAdded', cartItem);
+      } catch (error: any) {
+        dispatch('errorSetted', (error as Error).message)
+      }
+    },
+    async removeItemFromCart(productId: CartItem['productId']) {
+      try {
+        const cartItem = createCartItem({ productId });
+
+        dispatch('cartItemRemoved', cartItem);
       } catch (error: any) {
         dispatch('errorSetted', (error as Error).message)
       }
