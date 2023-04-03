@@ -19,7 +19,7 @@ export function createContextAdapter<
   
   const Context = createContext({
     state: initialState,
-    actions: {} as ReturnType<typeof config.actions>
+    actions: null as ReturnType<typeof config.actions>
   });
 
   Context.displayName = config.name;
@@ -55,6 +55,16 @@ export function createContextAdapter<
 
   return {
     Provider,
-    useContext: () => useContext(Context),
+    useContext: () => {
+      const value = useContext(Context);
+      
+      if (value.actions === null) {
+        throw new Error(
+          `[createContextAdapter]: No provider setted for ${config.name}`
+        );
+      }
+
+      return value;
+    },
   }
 }

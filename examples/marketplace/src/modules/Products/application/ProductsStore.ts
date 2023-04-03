@@ -39,7 +39,7 @@ export const ProductsStore = createSlice({
     errorSetted: (state, error: string) => produce(state, draft => {
       draft.meta.error = error;
       draft.meta.loading = false;
-    }) ,
+    }),
   },
   actions: (dispatch, repositories: Repositories) => ({
     async loadAllProducts() {
@@ -67,10 +67,11 @@ export const ProductsStore = createSlice({
     async removeProduct(id: Product['id']) {
       try {
         dispatch('loadingStarted', undefined);
-
+        
         await repositories.products.remove(id);
         dispatch('removed', id);
       } catch (error: any) {
+        console.log('errrrrr')
         dispatch('errorSetted', (error as Error).message)
       }
     }
