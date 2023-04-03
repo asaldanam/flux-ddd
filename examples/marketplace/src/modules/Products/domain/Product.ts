@@ -14,7 +14,7 @@ export type NewProduct = Optional<Product, 'id'>;
 // Value objects
 export const productNameMaxLength = 32;
 
-// Entity handlers
+// Entity creators
 export function createProduct(newProduct: NewProduct, products: Product[]): Product {
   if (!newProduct.name)
     throw new Error('name-mandatory')
@@ -36,7 +36,7 @@ export function createProduct(newProduct: NewProduct, products: Product[]): Prod
   
   
   return {
-    id: newProduct.id || new Date().getTime().toString(),
+    id: new Date().getTime().toString(),
     ...newProduct,
   }
 }

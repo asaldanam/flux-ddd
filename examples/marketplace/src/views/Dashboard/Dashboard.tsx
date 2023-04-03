@@ -1,7 +1,7 @@
-import { ProductsTable } from "views/ProductsTable/ProductsTable"
+import { ProductsTable } from "views/Dashboard/ProductsTable/ProductsTable"
 
 export const Dashboard = () => {
-  console.log('render');
+  console.log('render Dashboard');
   return (
     <>
       <div style={{
