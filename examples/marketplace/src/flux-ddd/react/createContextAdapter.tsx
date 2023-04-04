@@ -1,4 +1,5 @@
-import { createContext, PropsWithChildren, useContext, useMemo, useReducer } from "react";
+import { DomainEventBase } from "flux-ddd/types";
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useReducer } from "react";
 
 export function createContextAdapter<
   Name extends string,
@@ -8,21 +9,28 @@ export function createContextAdapter<
   Dispatch extends <T extends Type>(type: T, payload: Parameters<Reducers[T]>[1]) => void,
   Actions extends any,
   Repositories extends any,
->(config: {
-    name: Name;
-    state: State;
-    reducers: Reducers,
-
-    actions: (dispatch: Dispatch, repositories: Repositories) => Actions
-}) {
-  const initialState = config.state;
+>(
+    slice: {
+      name: Name;
+      state: State;
+      reducers: Reducers,
+      actions: (dispatch: Dispatch, repositories: Repositories) => Actions,
+      externalEvents?: <E extends DomainEventBase>(event: E, actions: Actions) => void, 
+    },
+    config?: {
+      eventManager?: EventTarget,
+    }
+  )
+{
+  const { eventManager } = config || {}
+  const initialState = slice.state;
   
   const Context = createContext({
     state: initialState,
-    actions: null as ReturnType<typeof config.actions>
+    actions: null as ReturnType<typeof slice.actions>
   });
 
-  Context.displayName = config.name;
+  Context.displayName = slice.name;
   
   const Provider = ({ children, ...repositories }: PropsWithChildren<Repositories>) => {
     const reducer = (
@@ -32,16 +40,34 @@ export function createContextAdapter<
         payload: Parameters<Dispatch>[1]
       }
     ) => {
-      return config.reducers[action.type](state, action.payload);
+      return slice.reducers[action.type](state, action.payload);
     }
 
     const [state, _dispatch] = useReducer(reducer, initialState);
    
     const dispatch = ((type, payload) => {
-      _dispatch({ type, payload })
+      const params = { type, payload }
+
+      _dispatch(params)
+      eventManager?.dispatchEvent(
+        new CustomEvent('event-manager', { detail: { slice: slice.name, ...params } })
+      )
     }) as Dispatch;
 
-    const actions = config.actions(dispatch, repositories as Repositories);
+    const actions = slice.actions(dispatch, repositories as Repositories);
+
+    useEffect(() => {
+      if (!eventManager) return;
+      const subscription = (e: any) => {
+        const detail: DomainEventBase = e.detail;
+        if (!slice.externalEvents || detail.slice === slice.name) return;
+
+        slice.externalEvents(detail, actions)
+      }
+      eventManager.addEventListener('event-manager', subscription)
+      return () => eventManager.removeEventListener('event-manager', subscription)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const value = useMemo(() => ({ state, actions }), [state])
@@ -60,7 +86,7 @@ export function createContextAdapter<
       
       if (value.actions === null) {
         throw new Error(
-          `[createContextAdapter]: No provider setted for ${config.name}`
+          `[createContextAdapter]: No provider setted for ${slice.name}`
         );
       }
 

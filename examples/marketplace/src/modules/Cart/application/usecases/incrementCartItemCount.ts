@@ -7,7 +7,5 @@ export function incrementCartItemCount(draft: typeof CartStore['state'], cartIte
       ? { ...item, units: item.units + cartItem.units }
       : item
   )
-
-  console.log(draft, cartItem.units)
 }
 

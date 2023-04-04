@@ -49,6 +49,11 @@ export const CartStore = createSlice({
         dispatch('errorSetted', (error as Error).message)
       }
     }
-  })
+  }),
+  externalEvents(event, actions) {
+    console.log(event )
+    if (event.slice === 'Products' && event.type === 'removed') {
+      actions.removeItemFromCart(event.payload)
+    }
+  }
 })
-

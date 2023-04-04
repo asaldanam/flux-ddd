@@ -1,0 +1,1 @@
+export type DomainEventBase = { slice: string; type: string, payload: any };

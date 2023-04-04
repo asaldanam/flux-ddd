@@ -10,7 +10,8 @@ export function createSlice<
     name: Name;
     state: State;
     reducers: Reducers,
-    actions: (dispatch: Dispatch, repositories: Repositories) => Actions
+    actions: (dispatch: Dispatch, repositories: Repositories) => Actions,
+    externalEvents?: <E extends { slice: string; type: string, payload: any }>(event: E, actions: Actions) => void, 
   }) {
   return config;
 }
