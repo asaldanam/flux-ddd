@@ -1,5 +1,6 @@
 import { DomainEventBase } from "flux-ddd/types";
-import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useReducer } from "react";
+import { createContext, PropsWithChildren, useContext, useMemo, useReducer } from "react";
+import { useEventManager } from "./eventManager";
 
 export function createContextAdapter<
   Name extends string,
@@ -17,12 +18,8 @@ export function createContextAdapter<
       actions: (dispatch: Dispatch, repositories: Repositories) => Actions,
       externalEvents?: <E extends DomainEventBase>(event: E, actions: Actions) => void, 
     },
-    config?: {
-      eventManager?: EventTarget,
-    }
   )
 {
-  const { eventManager } = config || {}
   const initialState = slice.state;
   
   const Context = createContext({
@@ -44,30 +41,24 @@ export function createContextAdapter<
     }
 
     const [state, _dispatch] = useReducer(reducer, initialState);
+
+    const subscription = (e: any) => {
+      const detail: DomainEventBase = e.detail;
+      if (!slice.externalEvents || detail.slice === slice.name) return;
+
+      slice.externalEvents(detail, actions)
+    }
+
+    const { send } = useEventManager({ subscription: slice.externalEvents ? subscription : null })
    
     const dispatch = ((type, payload) => {
       const params = { type, payload }
 
       _dispatch(params)
-      eventManager?.dispatchEvent(
-        new CustomEvent('event-manager', { detail: { slice: slice.name, ...params } })
-      )
+      send({ slice: slice.name, ...params });
     }) as Dispatch;
 
     const actions = slice.actions(dispatch, repositories as Repositories);
-
-    useEffect(() => {
-      if (!eventManager) return;
-      const subscription = (e: any) => {
-        const detail: DomainEventBase = e.detail;
-        if (!slice.externalEvents || detail.slice === slice.name) return;
-
-        slice.externalEvents(detail, actions)
-      }
-      eventManager.addEventListener('event-manager', subscription)
-      return () => eventManager.removeEventListener('event-manager', subscription)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const value = useMemo(() => ({ state, actions }), [state])

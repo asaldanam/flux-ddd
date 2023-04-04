@@ -51,7 +51,6 @@ export const CartStore = createSlice({
     }
   }),
   externalEvents(event, actions) {
-    console.log(event )
     if (event.slice === 'Products' && event.type === 'removed') {
       actions.removeItemFromCart(event.payload)
     }

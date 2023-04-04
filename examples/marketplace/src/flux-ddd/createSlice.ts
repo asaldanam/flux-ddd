@@ -1,3 +1,5 @@
+import { DomainEventBase } from "./types";
+
 export function createSlice<
   Name extends string,
   State extends any,
@@ -11,7 +13,7 @@ export function createSlice<
     state: State;
     reducers: Reducers,
     actions: (dispatch: Dispatch, repositories: Repositories) => Actions,
-    externalEvents?: <E extends { slice: string; type: string, payload: any }>(event: E, actions: Actions) => void, 
+    externalEvents?: <E extends DomainEventBase>(event: E, actions: Actions) => void, 
   }) {
   return config;
 }

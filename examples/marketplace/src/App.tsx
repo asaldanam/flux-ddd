@@ -1,3 +1,4 @@
+import { EventManagerProvider } from "flux-ddd/react/eventManager";
 import { CartProvider } from "modules/Cart/infraestructure/cartContext";
 import { Backoffice } from "views/Backoffice/Backoffice";
 import { Shop } from "views/Shop/Shop";
@@ -7,14 +8,16 @@ import { ProductsProvider } from "./modules/Products/infraestructure/productsCon
 function App() {
   return (
     <div>
-      <ProductsProvider products={localStorageProductsRepository}>
-        <CartProvider>
-          <div>
-            <Shop />
-            <Backoffice />
-          </div>
-        </CartProvider>
-      </ProductsProvider>
+      <EventManagerProvider>
+        <ProductsProvider products={localStorageProductsRepository}>
+          <CartProvider>
+            <div>
+              <Shop />
+              <Backoffice />
+            </div>
+          </CartProvider>
+        </ProductsProvider>
+      </EventManagerProvider>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { EventManagerProvider } from 'flux-ddd/react/eventManager';
 import { CartProvider } from 'modules/Cart/infraestructure/cartContext';
 import { ProductsRepository } from 'modules/Products/domain/ProductsRepository';
 import { ProductsProvider } from 'modules/Products/infraestructure/productsContext';
@@ -47,11 +48,13 @@ async function setup() {
   // eslint-disable-next-line testing-library/no-unnecessary-act
   await act(async () => 
     render(
-      <ProductsProvider products={mockProductsRepository}>
-        <CartProvider>
-          <ProductsTable editable />
-        </CartProvider>
-      </ProductsProvider>
+      <EventManagerProvider>
+        <ProductsProvider products={mockProductsRepository}>
+          <CartProvider>
+            <ProductsTable editable />
+          </CartProvider>
+        </ProductsProvider>
+      </EventManagerProvider>
     )
   )
 }

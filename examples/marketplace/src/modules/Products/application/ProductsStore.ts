@@ -71,7 +71,6 @@ export const ProductsStore = createSlice({
         await repositories.products.remove(id);
         dispatch('removed', id);
       } catch (error: any) {
-        console.log('errrrrr')
         dispatch('errorSetted', (error as Error).message)
       }
     }
