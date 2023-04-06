@@ -1,4 +1,4 @@
-import { createContextAdapter } from "flux-ddd/react";
+import { createContextAdapter } from "flux-ddd";
 import { CartStore } from "../application/CartStore";
 
 const cartContext = createContextAdapter(CartStore);

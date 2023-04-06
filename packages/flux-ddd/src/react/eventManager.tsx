@@ -1,5 +1,5 @@
-import { DomainEventBase } from "flux-ddd/types";
-import { createContext, PropsWithChildren, useContext, useEffect } from "react";
+import { DomainEventBase } from "../types";
+import React, { createContext, PropsWithChildren, useContext, useEffect } from "react";
 
 type Value = {
   manager?: EventTarget
@@ -24,17 +24,16 @@ export function EventManagerProvider({ children, manager, eventKey }: PropsWithC
 export function useEventManager(props: { subscription?: EventListenerOrEventListenerObject | null }) {
   const { subscription } = props;
   const { manager, eventKey } = useContext(EventManagerCtx);
-  const eventManagerNotProvided = !manager || !eventKey;
 
   const send = (detail: DomainEventBase) => {
-    if (eventManagerNotProvided) return;
+    if (!manager || !eventKey) return;
     manager.dispatchEvent(new CustomEvent(eventKey, { detail }))
   }
 
   useEffect(() => {    
     if (!subscription) return;
 
-    if (eventManagerNotProvided) {
+    if (!manager || !eventKey) {
       console.warn('[EventManager] no provider found. Should instance <EventManagerProvider> at top of the tree');
       return;
     }

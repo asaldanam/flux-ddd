@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react';
-import { EventManagerProvider } from 'flux-ddd/react/eventManager';
+import { EventManagerProvider } from 'flux-ddd';
 import { CartProvider } from 'modules/Cart/infraestructure/cartContext';
 import { ProductsRepository } from 'modules/Products/domain/ProductsRepository';
 import { ProductsProvider } from 'modules/Products/infraestructure/productsContext';

@@ -1,5 +1,5 @@
-import { DomainEventBase } from "flux-ddd/types";
-import { createContext, PropsWithChildren, useContext, useMemo, useReducer } from "react";
+import { DomainEventBase } from "../types";
+import React, { createContext, PropsWithChildren, useContext, useMemo, useReducer } from "react";
 import { useEventManager } from "./eventManager";
 
 export function createContextAdapter<
@@ -9,7 +9,7 @@ export function createContextAdapter<
   Type extends Extract<keyof Reducers, string>,
   Dispatch extends <T extends Type>(type: T, payload: Parameters<Reducers[T]>[1]) => void,
   Actions extends any,
-  Repositories extends any,
+  Repositories extends Object,
 >(
     slice: {
       name: Name;

@@ -1,4 +1,4 @@
-import { EventManagerProvider } from "flux-ddd/react/eventManager";
+import { EventManagerProvider } from "flux-ddd";
 import { CartProvider } from "modules/Cart/infraestructure/cartContext";
 import { Backoffice } from "views/Backoffice/Backoffice";
 import { Shop } from "views/Shop/Shop";
