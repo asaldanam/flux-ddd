@@ -6,7 +6,7 @@ import { incrementCartItemCount } from "./usecases/incrementCartItemCount";
 
 export const CartStore = createSlice({
   name: 'Cart',
-  state: {
+  initialState: {
     cart: [] as CartItem[],
     meta: {
       error: null as string | null,
@@ -30,7 +30,7 @@ export const CartStore = createSlice({
       draft.meta.error = error;
     })
   },
-  actions: (state, dispatch) => ({
+  actions: ({ state, dispatch }) => ({
     async addItemToCart(productId: CartItem['productId']) {
       try {
         const cartItem = createCartItem({ productId });

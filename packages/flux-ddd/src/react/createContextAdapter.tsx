@@ -13,14 +13,14 @@ export function createContextAdapter<
 >(
     slice: {
       name: Name;
-      state: State;
+      initialState: State;
       reducers: Reducers,
-      actions: (state: State, dispatch: Dispatch, repositories: Repositories) => Actions,
+      actions: (store: { state: State, dispatch: Dispatch }, repositories: Repositories) => Actions,
       externalEvents?: <E extends DomainEventBase>(event: E, actions: Actions) => void, 
     },
   )
 {
-  const initialState = slice.state;
+  const { initialState } = slice;
   
   const Context = createContext({
     state: initialState,
@@ -58,7 +58,7 @@ export function createContextAdapter<
       send({ slice: slice.name, ...params });
     }) as Dispatch;
 
-    const actions = slice.actions(Object.freeze(state), dispatch, repositories as Repositories);
+    const actions = slice.actions({ state: Object.freeze(state), dispatch }, repositories as Repositories);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const value = useMemo(() => ({ state, actions }), [state])

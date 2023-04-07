@@ -10,9 +10,9 @@ export function createSlice<
   Repositories extends any,
 >(config: {
     name: Name;
-    state: State;
+    initialState: State;
     reducers: Reducers,
-    actions: (state: State, dispatch: Dispatch, repositories: Repositories) => Actions,
+    actions: (store: { state: State, dispatch: Dispatch }, repositories: Repositories) => Actions,
     externalEvents?: <E extends DomainEventBase>(event: E, actions: Actions) => void, 
   }) {
   return config;

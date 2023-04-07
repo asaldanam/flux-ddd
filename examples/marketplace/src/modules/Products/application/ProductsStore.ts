@@ -9,7 +9,7 @@ interface Repositories {
 
 export const ProductsStore = createSlice({
   name: 'Products',
-  state: {
+  initialState: {
     products: [] as Product[],
     meta: {
       loading: false,
@@ -41,7 +41,7 @@ export const ProductsStore = createSlice({
       draft.meta.loading = false;
     }),
   },
-  actions: (state, dispatch, repositories: Repositories) => ({
+  actions: ({ state, dispatch }, repositories: Repositories) => ({
     async loadAllProducts() {
       try {
         dispatch('loadingStarted', undefined);
