@@ -15,7 +15,7 @@ export function createContextAdapter<
       name: Name;
       state: State;
       reducers: Reducers,
-      actions: (dispatch: Dispatch, repositories: Repositories) => Actions,
+      actions: (state: State, dispatch: Dispatch, repositories: Repositories) => Actions,
       externalEvents?: <E extends DomainEventBase>(event: E, actions: Actions) => void, 
     },
   )
@@ -58,7 +58,7 @@ export function createContextAdapter<
       send({ slice: slice.name, ...params });
     }) as Dispatch;
 
-    const actions = slice.actions(dispatch, repositories as Repositories);
+    const actions = slice.actions(Object.freeze(state), dispatch, repositories as Repositories);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const value = useMemo(() => ({ state, actions }), [state])

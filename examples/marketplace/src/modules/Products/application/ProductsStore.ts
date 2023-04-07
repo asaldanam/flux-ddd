@@ -41,7 +41,7 @@ export const ProductsStore = createSlice({
       draft.meta.loading = false;
     }),
   },
-  actions: (dispatch, repositories: Repositories) => ({
+  actions: (state, dispatch, repositories: Repositories) => ({
     async loadAllProducts() {
       try {
         dispatch('loadingStarted', undefined);

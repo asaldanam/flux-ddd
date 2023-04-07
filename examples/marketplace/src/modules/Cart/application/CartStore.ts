@@ -30,7 +30,7 @@ export const CartStore = createSlice({
       draft.meta.error = error;
     })
   },
-  actions: (dispatch) => ({
+  actions: (state, dispatch) => ({
     async addItemToCart(productId: CartItem['productId']) {
       try {
         const cartItem = createCartItem({ productId });
