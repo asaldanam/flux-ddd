@@ -1,4 +1,4 @@
-import { storeToContextAdapter } from "flux-toolkit/react/storeToContextAdapter";
+import { storeToContextAdapter } from "flux-toolkit/react";
 import { productsStore } from "../application/productsStore";
 
 
