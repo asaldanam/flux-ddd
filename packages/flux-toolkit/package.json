@@ -1,0 +1,66 @@
+{
+  "name": "flux-toolkit",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "asaldanam",
+  "main": "dist/index.js",
+  "module": "dist/flux-toolkit.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "analyze": "size-limit --why",
+    "build": "dts build",
+    "lint": "dts lint",
+    "prepare": "dts build",
+    "size": "size-limit",
+    "start": "dts watch",
+    "test": "dts test --passWithNoTests"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "dts lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "size-limit": [
+    {
+      "path": "dist/flux-toolkit.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/flux-toolkit.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^8.2.4",
+    "@tsconfig/recommended": "^1.0.2",
+    "@tsconfig/vite-react": "^1.0.1",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "dts-cli": "^2.0.0",
+    "husky": "^8.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "size-limit": "^8.2.4",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4"
+  }
+}

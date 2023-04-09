@@ -7,8 +7,8 @@
   "scripts": {
     "lib:create": "tsdx create",
     "start:marketplace": "yarn workspace marketplace start",
-    "start:flux-ddd": "yarn workspace flux-ddd start",
-    "build:flux-ddd": "yarn workspace flux-ddd build"
+    "start:flux-toolkit": "yarn workspace flux-toolkit start",
+    "build:flux-toolkit": "yarn workspace flux-toolkit build"
   },
   "author": "asaldanam",
   "license": "ISC",
