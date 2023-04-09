@@ -7,7 +7,7 @@ interface ProductsTableProps {
 }
 
 export const ProductsTable = ({ editable }: ProductsTableProps) => {
-  const { state: { products, meta }, actions: { loadAllProducts, addNewProduct, removeProduct } } = useProducts();
+  const [{ products, meta }, { loadAllProducts, addNewProduct, removeProduct }] = useProducts();
   const { actions: { addItemToCart } } = useCart();
 
   useEffect(() => {

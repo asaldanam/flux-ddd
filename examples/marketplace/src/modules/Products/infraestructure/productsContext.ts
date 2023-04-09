@@ -1,7 +1,8 @@
-import { createContextAdapter } from "flux-ddd";
-import { ProductsStore } from "../application/ProductsStore";
+import { storeToContextAdapter } from "flux-toolkit/react/storeToContextAdapter";
+import { productsStore } from "../application/productsStore";
 
-const productsContext = createContextAdapter(ProductsStore)
+
+const productsContext = storeToContextAdapter(productsStore)
 
 export const ProductsProvider = productsContext.Provider;
 export const useProducts = productsContext.useContext;
